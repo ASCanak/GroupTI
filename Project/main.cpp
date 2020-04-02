@@ -66,6 +66,10 @@ bool verbondenKamers(vector<vector<int>> rooms, int index, int controle, int var
 	}		
 }
 
+bool dubbeleVerbondenKamers(vector<vector<int>> rooms, int index, int controle, int variatie){
+	return 0;
+}
+
 int pijlen(int &pijl_Count){
 	if(pijl_Count > 0)
 		return pijl_Count -= 1;
@@ -74,7 +78,7 @@ int pijlen(int &pijl_Count){
 }
 
 void spel(vector<vector<int>> rooms, int index, int input, int wumpus, int valKuil, int valKuil1, int bat, int bat1, int pijl, int variatie){
-	cout << endl << "(Typ '-1' als je wilt stoppen met spelen, Typ '-3' als je de wumpuslocatie wilt zien snoepie!)" << endl;
+	cout << endl << "(Typ '-1' als je wilt stoppen met spelen, Typ '-3' als je de wumpuslocatie als hint wilt zien snoepie!)" << endl;
 	while(input != -1){
 		if(input == -2 && wumpus != index && pijl != 0){
 			cout << endl << "--------------------------------------------------------------------------------------" << endl;
@@ -83,7 +87,7 @@ void spel(vector<vector<int>> rooms, int index, int input, int wumpus, int valKu
 				cout << rooms[index][j] << " ";
 			}
 			cout << endl << endl << "--------------------------------------------------------------------------------------" << endl;
-			if( (verbondenKamers(rooms, index, bat, 0) || verbondenKamers(rooms, index, bat1, 0)) && (verbondenKamers(rooms, index, valKuil, 0) || verbondenKamers(rooms, index, valKuil1, 0)) && verbondenKamers(rooms, index, wumpus, 0)){
+			if( (verbondenKamers(rooms, index, bat, 0) || verbondenKamers(rooms, index, bat1, 0)) || (verbondenKamers(rooms, index, valKuil, 0) || verbondenKamers(rooms, index, valKuil1, 0)) ||  verbondenKamers(rooms, index, wumpus, 0)){
 				if((verbondenKamers(rooms, index, bat, 0) || verbondenKamers(rooms, index, bat1, 0)) && verbondenKamers(rooms, index, wumpus, 1))
 					cout << endl << "Waarschuwing: Ik hoor gefladder!" << endl; 
 				if((verbondenKamers(rooms, index, valKuil, 0) || verbondenKamers(rooms, index, valKuil1, 0)) && verbondenKamers(rooms, index, wumpus, 1))
@@ -101,7 +105,8 @@ void spel(vector<vector<int>> rooms, int index, int input, int wumpus, int valKu
 				input = rand() % 40;
 		}
 		else if(input == -3){ //Cheat-menu
-			cout << "De Wumpus zit in kamer: " << wumpus << endl;
+			cout << endl << "--------------------------------------------------------------------------------------" << endl;
+			cout << endl << "Hint: De Wumpus zit in kamer: " << wumpus << endl;
 			input = -2;
 		}
 		else if(pijl == 0){
@@ -222,7 +227,7 @@ void spel(vector<vector<int>> rooms, int index, int input, int wumpus, int valKu
 			cout << endl << "--------------------------------------------------------------------------------------" << endl;
 			cout << endl << "Je komt een donkere kamer binnen. Je voelt een druppel op je hoofd vallen, het was alleen geen water maar kwijl!" << endl;
 			cout << "een super vleermuis grijpt met zijn grote poten jou op en sleurt jou door de kamers van de grot." << endl;
-			cout << "Je slaat de vleesmuis meerdere keren op zijn neus, na de vierde keer lukt het om jezelf los te wikkelen van de vleermuis." << endl;
+			cout << "Je slaat de vleermuis meerdere keren op zijn neus, na de vierde keer lukt het om jezelf los te wikkelen van de vleermuis." << endl;
 			cout << "De vleermuis vliegt weg." << endl;
 			cout << "Je valt op de grond, nog steeds in dezelfde grot, met nog steeds dezelfde missie..." << endl;
 			cout << "Dood de Wumpus." << endl;
