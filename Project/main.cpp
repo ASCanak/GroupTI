@@ -5,7 +5,7 @@
 #include <fstream>
 using namespace std;
 
-void spel_Instructies(){
+void spel_Instructies(){//instructie functies
 	cout << endl << "   Welkom bij 'Hunt de Wumpus'" << endl;
 	cout << " De Wumpus leeft in een grot met 20 kamers, elke kamer is verbonden met 3 andere kamers." << endl;
 	cout << endl << "--------------------------------------------------------------------------------------" << endl << endl; 
@@ -72,12 +72,12 @@ bool dubbeleVerbondenKamers(vector<vector<int>> rooms, int index, int controle, 
 
 int pijlen(int &pijl_Count){
 	if(pijl_Count > 0)
-		return pijl_Count -= 1;
+		return pijl_Count -= 1; // return oud pijlcount - 1
 	else
 		return pijl_Count;
 }
 
-void spel(vector<vector<int>> rooms, int index, int input, int wumpus, int valKuil, int valKuil1, int bat, int bat1, int pijl, int variatie){
+void spel(vector<vector<int>> rooms, int index, int input, int wumpus, int valKuil, int valKuil1, int bat, int bat1, int pijl, int variatie){//Parameters= de kamers, plek waar je bent, wat de speler invoert, locatie wumpus,valkuil en vleermuizen, pijlen en speler of computer
 	cout << endl << "(Typ '-1' als je wilt stoppen met spelen, Typ '-3' als je de wumpuslocatie als hint wilt zien snoepie!)" << endl;
 	while(input != -1){
 		if(input == -2 && wumpus != index && pijl != 0){
@@ -88,15 +88,15 @@ void spel(vector<vector<int>> rooms, int index, int input, int wumpus, int valKu
 			}
 			cout << endl << endl << "--------------------------------------------------------------------------------------" << endl;
 			if( (verbondenKamers(rooms, index, bat, 0) || verbondenKamers(rooms, index, bat1, 0)) || (verbondenKamers(rooms, index, valKuil, 0) || verbondenKamers(rooms, index, valKuil1, 0)) ||  verbondenKamers(rooms, index, wumpus, 0)){
-				if((verbondenKamers(rooms, index, bat, 0) || verbondenKamers(rooms, index, bat1, 0)) && verbondenKamers(rooms, index, wumpus, 1))
+				if((verbondenKamers(rooms, index, bat, 0) || verbondenKamers(rooms, index, bat1, 0)) && verbondenKamers(rooms, index, wumpus, 1))// vleermuizen kamer is dichtbij
 					cout << endl << "Waarschuwing: Ik hoor gefladder!" << endl; 
-				if((verbondenKamers(rooms, index, valKuil, 0) || verbondenKamers(rooms, index, valKuil1, 0)) && verbondenKamers(rooms, index, wumpus, 1))
+				if((verbondenKamers(rooms, index, valKuil, 0) || verbondenKamers(rooms, index, valKuil1, 0)) && verbondenKamers(rooms, index, wumpus, 1))// vlakuil kamer is dichtbij
 					cout << endl << "Waarschuwing: Ik voel een koude rilling!" << endl;
-				if(verbondenKamers(rooms, index, wumpus, 0))
+				if(verbondenKamers(rooms, index, wumpus, 0))// de wumpus is dichtbij
 					cout << endl << "Waarschuwing: Ik ruik de Wumpus" << endl;
 			}
 			else
-				cout << endl << "Niks aan de hand" << endl;
+				cout << endl << "Niks aan de hand" << endl;//geen obstakels in de buurt
 			cout << endl << "--------------------------------------------------------------------------------------" << endl;
 			cout << endl << "Naar welke kamer zou je willen lopen of schieten" << endl << "Als je wilt lopen voer je de gewenste kamernummer in" << endl << "Als je wilt schieten voer je de gewenste kamernummer +20 in: ";
 			if(variatie == 0)
@@ -109,13 +109,13 @@ void spel(vector<vector<int>> rooms, int index, int input, int wumpus, int valKu
 			cout << endl << "Hint: De Wumpus zit in kamer: " << wumpus << endl;
 			input = -2;
 		}
-		else if(pijl == 0){
+		else if(pijl == 0){//pijlen zijn op
 			cout << "Je pijlen zijn op... Maar in een wanhopige poging zoek je de Wumpus op." << endl;
 			cout << "Je vindt de Wumpus en daagt het uit. Met een boog zonder pijlen sta je oog in oog met de Wumpus." << endl;
 			cout << "Je breekt je boog, om een scherp stuk hout te krijgen. Je vraagt jezelf af hoe dit zou aflopen..." << endl;
 			while(input < 0)
-				input = rand() % 1000;
-			if(input == 0){
+				input = rand() % 1000;// 1 op de 1000 kans
+			if(input == 0){//gewonnen
 				cout << "De Wumpus is in een oogwenk bij je maar je was hierop voorbereid." << endl;
 				cout << "Je steekt met het stuk hout de wumpus in zijn keel en duwt hem op de grond." << endl;
 				cout << "Je houd de Wumpus op de grond terwijl je jouw houtstuk diep in zijn keel boort." << endl;
@@ -124,7 +124,7 @@ void spel(vector<vector<int>> rooms, int index, int input, int wumpus, int valKu
 				cout << endl << "--------------------------------------------------------------------------------------" << endl;
 				cout << endl << "Storyline Copyrighted by Ivo Berger 2020" << endl;
 			}
-			else{
+			else{//verloren
 				cout << "Helaas... In een oogwenk is de Wumpus bij je, het slaat de boog uit je handen en pakt je bij je keel." << endl;
 				cout << "Voordat je het weet wordt alles donkerder, Je krijgt geen adem meer... 'Vaarwel vrede wereld' zijn je laatste woorden..." << endl;
 				cout << "De Wumpus breekt je nek." << endl;
@@ -134,7 +134,7 @@ void spel(vector<vector<int>> rooms, int index, int input, int wumpus, int valKu
 			}
 			input = -1;
 		}
-		else if(cin.fail()){
+		else if(cin.fail()){//Foutieve Syntax
 			cout << endl << "--------------------------------------------------------------------------------------" << endl;
 			cout << endl << "Error: Foutieve Syntax!!!" << endl; 
 			cout << endl << "--------------------------------------------------------------------------------------" << endl;
@@ -146,7 +146,7 @@ void spel(vector<vector<int>> rooms, int index, int input, int wumpus, int valKu
 			else 
 				input = rand() % 40;
 		}
-		else if(index == input || index == input - 20){
+		else if(index == input || index == input - 20){// input is de kamer waar je al in bent
 			cout << endl << "--------------------------------------------------------------------------------------" << endl;
 			if(index == input)
 				cout << endl << "Error: Je zit al in die kamer!" << endl;
@@ -160,7 +160,7 @@ void spel(vector<vector<int>> rooms, int index, int input, int wumpus, int valKu
 				input = rand() % 40;
 		}
 		else if(input > 19){
-			if(((input - 20) == wumpus) && verbondenKamers(rooms, index, wumpus, 0)){
+			if(((input - 20) == wumpus) && verbondenKamers(rooms, index, wumpus, 0)){// als je de pijl in de wumpus kamer schiet
 				cout << endl << "--------------------------------------------------------------------------------------" << endl;
 				cout << endl << "Je hebt je pijl geschoten. Je pijl spietste de Wumpus recht door zijn hoofd.";
 				cout << endl << "Je geloofde je ogen niet. De Wumpus, degene naar wie je al 5 jaar jaagt... Is dood!";
@@ -170,7 +170,7 @@ void spel(vector<vector<int>> rooms, int index, int input, int wumpus, int valKu
 				cout << endl << "Storyline Copyrighted by Ivo Berger 2020" << endl;
 				input = -1;
 			}
-			else if(verbondenKamers(rooms, index, (input - 20), 2)){
+			else if(verbondenKamers(rooms, index, (input - 20), 2)){//ongeldige keuze
 				cout << endl << "--------------------------------------------------------------------------------------" << endl;
 				cout << endl << "Error: Ongeldige Keuze!" << endl;
 				cout << endl << "--------------------------------------------------------------------------------------" << endl;
@@ -181,7 +181,7 @@ void spel(vector<vector<int>> rooms, int index, int input, int wumpus, int valKu
 					input = rand() % 40;
 				
 			}
-			else{
+			else{// mis schieten
 				cout << endl << "--------------------------------------------------------------------------------------" << endl;
 				cout << endl << "De Wumpus was niet in kamer " << (input - 20) << ", de Wumpus is ontwaakt en is naar een willekeurige kamer verplaatst." << endl;
 				pijlen(pijl);
@@ -193,7 +193,7 @@ void spel(vector<vector<int>> rooms, int index, int input, int wumpus, int valKu
 				input = -2;
 			}
 		}
-		else if(verbondenKamers(rooms, index, input, 2)){
+		else if(verbondenKamers(rooms, index, input, 2)){//ongeldige keuze zie "void spel" voor uitleg over parameters
 			cout << endl << "--------------------------------------------------------------------------------------" << endl;
 			cout << endl << "Error: Ongeldige Keuze!" << endl;
 			cout << endl << "--------------------------------------------------------------------------------------" << endl;
@@ -201,9 +201,9 @@ void spel(vector<vector<int>> rooms, int index, int input, int wumpus, int valKu
 			if(variatie == 0)
 				cin >> input;
 			else 
-				input = rand() % 40;
+				input = rand() % 40;// computer 0 tot 40 mogelijkheden
 		}
-		else if(wumpus == input){
+		else if(wumpus == input){// speler is in wumpus kamer
 			cout << endl << "--------------------------------------------------------------------------------------" << endl;
 			cout << endl << "Je komt in een donkere, stinkende en grote kamer terecht. Je vraagt jezelf af wat er zo erg kan stinken." << endl;
 			cout << "Je loopt en kijkt rond in de kamer, maar je stoot tegen iets stevigs aan." << endl;
@@ -213,7 +213,7 @@ void spel(vector<vector<int>> rooms, int index, int input, int wumpus, int valKu
 			cout << "Game Over." << endl;
 			input = -1;
 		}
-		else if((valKuil == input || valKuil1 == input) && wumpus != input){
+		else if((valKuil == input || valKuil1 == input) && wumpus != input){// speler is in valkuil kamer
 			cout << endl << "--------------------------------------------------------------------------------------" << endl;
 			cout << endl << "Je bent altijd zo voorzichtig geweest... Je bent altijd alert geweest, alleen dit keer niet..." << endl;
 			cout << "Je struikelt over een stuk steen, je verliest je balans en voordat je het weet..." << endl;
@@ -221,9 +221,9 @@ void spel(vector<vector<int>> rooms, int index, int input, int wumpus, int valKu
 			cout << "Game Over." << endl;
 			input = -1;
 		}
-		else if((bat == input || bat1 == input) && wumpus != input){
+		else if((bat == input || bat1 == input) && wumpus != input){// speler is in vleermuis kamer
 			while(bat == input || bat1 == input) 
-				input = rand() % 20;
+				input = rand() % 20;//random kamer
 			cout << endl << "--------------------------------------------------------------------------------------" << endl;
 			cout << endl << "Je komt een donkere kamer binnen. Je voelt een druppel op je hoofd vallen, het was alleen geen water maar kwijl!" << endl;
 			cout << "een super vleermuis grijpt met zijn grote poten jou op en sleurt jou door de kamers van de grot." << endl;
@@ -241,12 +241,12 @@ void spel(vector<vector<int>> rooms, int index, int input, int wumpus, int valKu
 		}
 	}
 	cout << endl << "--------------------------------------------------------------------------------------" << endl;
-	cout << endl << "Dit project is mede-mogelijk gemaakt door 'int saus' free mijn niffo saus." << endl;
+	cout << endl << "Dit project is mede-mogelijk gemaakt door 'int saus' free mijn niffo saus." << endl;//SO naar saus
 	cout << endl << "--------------------------------------------------------------------------------------" << endl;
 	exit(0);
 }
 
-vector<unsigned int> configureerTraps(const unsigned int start){
+vector<unsigned int> configureerTraps(const unsigned int start){// zorgt ervoor dat de traps een random plek hebben
 	unsigned int valKuil = start, valKuil1 = start, bat = start, bat1 = start, wumpus = start;
     vector<unsigned int> trapRooms;
     while(wumpus == start)
@@ -264,10 +264,10 @@ vector<unsigned int> configureerTraps(const unsigned int start){
 }
 
 vector<vector <int>> configuratieRandomKamers(vector<vector <int>> kamers){
-	return kamers;
+	return kamers;// work in progress
 }
 
-void configuratie(const string &File){
+void configuratie(const string &File){//hardcoded matrix
 	vector<vector <int>> rooms= {
 								{10, 11, 19},  	//0
 								{2, 10, 11},   	//1
@@ -289,7 +289,7 @@ void configuratie(const string &File){
 								{7, 16, 18},	//17
 								{8, 17, 19},	//18
 								{0, 9, 18}};	//19
-	ofstream writeFile(File);
+	ofstream writeFile(File);// lees in configuratie.txt
 	if(writeFile.is_open()){
 		for(unsigned int i = 0; i < rooms.size(); i++){
 			for(unsigned int j = 0; j < rooms[i].size(); j++){
@@ -300,7 +300,7 @@ void configuratie(const string &File){
 	unsigned int configureerStart = rand() % 20;
 	vector<unsigned int> traps = configureerTraps(configureerStart);
 	writeFile << -1 << " " << configureerStart << endl;
-	for(unsigned int i = 0; i < 5; i++){
+	for(unsigned int i = 0; i < 5; i++){// schrijf in configueer.txt de locaties van de obstakels 
 		if(i == 0)
 			writeFile << -2 << " " << traps[i] << endl;	
 		else if(i == 1 || i == 2){
@@ -319,7 +319,7 @@ void configuratie(const string &File){
 }
 
 vector<vector<int>> configuratie_Rooms_Lezen(vector<vector<int>> &rooms, const string &File){
-	ifstream readFile(File);
+	ifstream readFile(File);// lees kamers in configuratie.txt
 	int arr[60], cnt = 0, x = 0;
 	
 	if(readFile.is_open()){
@@ -335,7 +335,7 @@ vector<vector<int>> configuratie_Rooms_Lezen(vector<vector<int>> &rooms, const s
 }
 
 vector<int> configuratie_TrapRooms_Lezen(vector<int> &trapRooms, const string &File){
-	ifstream readFile(File);
+	ifstream readFile(File);// obstakels lezen
 	int arr[72], cnt = 0, x = 0;
 	
 	if(readFile.is_open()){
@@ -374,9 +374,9 @@ int main(){
 			configuratie(file);
 			cout << "Configuratie aangemaakt:" << endl << "Als jij wilt spelen voer '1' in als je wilt dat het spel zichzelf uitspeelt voer '2' in: ";
 			cin >> state;
-			if(state == 1)
+			if(state == 1)//lees instructies
 				state = 3;
-			else if(state == 2)
+			else if(state == 2)// laat computer het spel spelen
 				state = 4;
 			else
 				state = 5;
