@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <string>
 #include <time.h>
 #include <stdlib.h>
 #include <windows.h>
@@ -79,16 +80,6 @@ int pijlen(int &pijl_Count){
 		return pijl_Count;
 }
 
-int computerInputDom(vector<vector<int>> rooms, int index, int input){
-	int LofS = rand() % 2;
-		if(LofS == 0)
-			input = rooms[index][rand() % 3];
-		else
-			input = (rooms[index][rand() % 3]) + 20;
-	Sleep(1000);
-	return input;
-}
-
 int computerInputSlim(vector<vector<int>> rooms, int index, int input, vector<int> &avoidKamers){
 	if(verbondenKamers(rooms, index, avoidKamers[0], 0))
 		input = (avoidKamers[0]) + 20;
@@ -124,12 +115,11 @@ int spel(vector<vector<int>> rooms, int index, int input, int wumpus, int valKui
 			cout << endl << "Naar welke kamer zou je willen lopen of schieten" << endl << "Als je wilt lopen voer je de gewenste kamernummer in" << endl << "Als je wilt schieten voer je de gewenste kamernummer +20 in: ";
 			if(variatie == 0)
 				cin >> input;
-			else if(variatie == 1)
-				input = computerInputDom(rooms, index, input);
-			else if(variatie == 2)
+			else if(variatie == 1){
 				input = computerInputSlim(rooms, index, input, avoidKamers);
-			if(variatie == 1 || variatie == 2)
 				cout << input;
+			}
+				
 		}
 		else if(input == -3){ // Cheat-menu
 			cout << endl << "--------------------------------------------------------------------------------------" << endl;
@@ -209,13 +199,13 @@ int spel(vector<vector<int>> rooms, int index, int input, int wumpus, int valKui
 		}
 		else if(index == input || cin.fail() || verbondenKamers(rooms, index, input, 2)){ // Error Controle (Lopen)
 			cout << endl << "--------------------------------------------------------------------------------------" << endl;
-			if(index == input)
-				cout << endl << "Error: Je zit al in die kamer!" << endl;
-			else if(cin.fail()){
+			if(cin.fail()){
 				cout << endl << "Error: Foutieve Syntax!" << endl; 
 				cin.clear();
 				cin.ignore(INT_MAX, '\n');
 			}
+			else if(index == input)
+				cout << endl << "Error: Je zit al in die kamer!" << endl;
 			else if(verbondenKamers(rooms, index, input, 2))
 				cout << endl << "Error: Ongeldige Keuze!" << endl;
 			cout << endl << "--------------------------------------------------------------------------------------" << endl;
@@ -386,6 +376,53 @@ vector<int> configuratie_TrapRooms_Lezen(vector<int> &trapRooms, const string &F
 	return trapRooms;
 }
 
+void highscoreOverwrite(int beurten, string naam){
+	ofstream writeFile("Project/highscores.txt");
+	writeFile << beurten << " " << naam; 
+	writeFile.close();
+}
+
+void highscoreControle(int beurten){
+    ifstream readFile("Project/highscores.txt");
+    string line, naam;
+
+    if(readFile.is_open()){
+        if(readFile.peek() == ifstream::traits_type::eof()){ //Bron: https://stackoverflow.com/questions/26228424/how-to-detect-an-empty-file-in-c
+            cout << "Je hebt de nieuwe Highscore!!" << endl;
+            cout << "De nieuwe Highscore is: " << beurten << endl;
+            cout << "Onder welke naam zou je jouw Highscore willen opslaan: ";
+            cin >> naam;
+            highscoreOverwrite(beurten, naam);
+        }
+        else{
+            while(getline(readFile, line)){
+                string substring = line.substr(0, 1);
+                int oudeHighscore = stoi(substring);
+                
+                if(oudeHighscore > beurten){
+                    cout << "Je hebt de nieuwe Highscore!!" << endl;
+                    cout << "De oude Highscore was: " << oudeHighscore << " van "; 
+                    for(int i = 2; line[i]; i++){
+                        cout << line[i];
+                    }
+                    cout << endl << "De nieuwe Highscore is: " << beurten << endl;
+                    cout << "Onder welke naam zou je jouw Highscore willen opslaan: ";
+                    cin >> naam;
+                    highscoreOverwrite(beurten, naam);
+                }
+                else if(oudeHighscore == beurten)
+                    cout << "Je score was gelijk aan die van de Highscore, dus gg: Score - " << beurten << ", " << oudeHighscore << endl;
+                else
+                  cout << "De oude Highscore is niet verbeterd: " << endl << "Je score is: " << beurten << endl << "De Highscore is: " << oudeHighscore << endl;
+				cout << endl << "--------------------------------------------------------------------------------------" << endl;
+            }
+        }
+        readFile.close();
+    }
+    else
+        cout << "Can't open file" << endl;
+}
+
 int main(){
 	srand(time(NULL));
 	vector<vector<int>> rooms = {};
@@ -406,9 +443,11 @@ int main(){
 			cout << endl << "--------------------------------------------------------------------------------------" << endl;
 		}
 		else if(state == 2){ // Random Configuratie Generator
+			ofstream readFile("Project/highscores.txt", ios::trunc); //Bron: https://www.reddit.com/r/cpp_questions/comments/9jq3i6/delete_data_in_file_c/
 			configuratie(file);
 			cout << "Configuratie aangemaakt:" << endl << "Als jij wil spelen voer '1' in als je wil dat het spel zichzelf uitspeelt voer '2' in: ";
 			cin >> state;
+			cout << endl << "--------------------------------------------------------------------------------------" << endl;
 			if(state == 1)
 				state = 3;
 			else if(state == 2)
@@ -423,7 +462,7 @@ int main(){
 			spel(rooms, trapRooms[0], -2, trapRooms[1], trapRooms[2], trapRooms[3], trapRooms[4], trapRooms[5], 5, 0, win, avoidKamers);
 			state = -10;
 		}
-		else if(state == 4){ // Speler: computerDom
+		else if(state == 4){ // Speler: computerSlim
 			beurten++;
 			configuratie_Rooms_Lezen(rooms, file);
 			configuratie_TrapRooms_Lezen(trapRooms, file);
@@ -433,22 +472,22 @@ int main(){
 			else 
 				state = -10;
 		}
-		else if(state == 5){ // Speler: computerSlim
-			beurten++;
-			configuratie_Rooms_Lezen(rooms, file);
-			configuratie_TrapRooms_Lezen(trapRooms, file);
-			spel(rooms, trapRooms[0], -2, trapRooms[1], trapRooms[2], trapRooms[3], trapRooms[4], trapRooms[5], 5, 2, win, avoidKamers);
+		else if(state == -10){ // Statistiek: W.I.P. PS(Niet Gered, gegaan voor alternatief)
+			cout << endl;
 			if (win != 1)
-				state = 5;
-			else 
-				state = -10;
-		}
-		else if(state == -10){ // Statistiek: W.I.P.
-			if (win != 1)
-				cout << "Aangezien je hebt verloren in je vorige beurt heb je misschien zin om nog een keer te spelen voer '1' in om het nog een keer te proberen: ";
-			else 
-				cout << "De computer heeft zojuist gewonnen wil je hem nog een keer laten spelen?" << " " << beurten;			
+				cout << "Je hebt zojuist verloren! ";
+			else
+				highscoreControle(beurten);
+				
+			cout << endl << "Wil je nog een keer spelen? voer dan '1' in of als je wil dat het spel zichzelf uit laat spelen voer '2' in: ";
 			cin >> state;
+			cout << endl << "--------------------------------------------------------------------------------------" << endl;
+			if(state == 1)
+				state = 3;
+			else if(state == 2)
+				state = 4;
+			else
+				state = 0;
 		}
 		else{ // Error Controle
 			if(cin.fail()){
