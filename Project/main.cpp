@@ -481,7 +481,6 @@ int main(){
 				win = 0;
 				beurten = 0;
 			}
-				
 			cout << endl << "Wil je nog een keer spelen? voer dan '1' in of als je wil dat het spel zichzelf uit laat spelen voer '2' in: ";
 			cin >> state;
 			cout << endl << "--------------------------------------------------------------------------------------" << endl;
